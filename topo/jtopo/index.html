@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>jtopo example</title>
+</head>
+<body>
+
+<canvas id="topo"></canvas>
+
+<script type="text/javascript" src="http://cdn.staticfile.org/jquery/1.11.1/jquery.min.js"></script>
+<script src="js/jtopo-0.4.8-min.js"></script>
+<script src="js/jquery.jtopo.js"></script>
+<script>
+    $(function () {
+        $.ajax({
+            url: 'data.json',
+            dataType: 'json',
+            method: 'GET',
+            success: function (data) {
+                $('#topo').topo({
+                    data: data,
+                    self_field: 'self_field',
+                    link_name: 'id0', //进入默认点击的link_name
+                    except: data.except,
+                    click: function () {
+                        console.log(this.self_field)
+                    },
+                    imgUrl: 'img/' //显示拓扑图图标的路径
+                });
+            }
+        });
+    })
+</script>
+</body>
+</html>

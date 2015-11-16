@@ -1,0 +1,101 @@
+{
+    "maxNode": 3,
+    "details": {
+        "start": [
+            {
+                "name": "start",
+                "link_name": "id0",
+                "status": 3,
+                "type": "start",
+                "self_field": {
+                    "value": "start"
+                }
+            }
+        ],
+        "nodes1": [
+            {
+                "name": "node1",
+                "link_name": "id1",
+                "status": 1,
+                "type": "node1",
+                "self_field": {
+                    "value": "node1"
+                }
+            },
+            {
+                "name": "node2",
+                "link_name": "id2",
+                "status": 2,
+                "type": "node1",
+                "self_field": {
+                    "value": "node2"
+                }
+            },
+            {
+                "name": "node3",
+                "link_name": "id3",
+                "status": 3,
+                "type": "node1",
+                "self_field": {
+                    "value": "node3"
+                }
+            }
+        ],
+        "nodes2": [
+            {
+                "name": "node4",
+                "link_name": "id4",
+                "status": 1,
+                "type": "node2",
+                "self_field": {
+                    "value": "node4"
+                }
+            },
+            {
+                "name": "node5",
+                "link_name": "id5",
+                "status": 2,
+                "type": "node2",
+                "self_field": {
+                    "value": "node5"
+                }
+            },
+            {
+                "name": "node6",
+                "link_name": "id6",
+                "status": 3,
+                "type": "node2",
+                "self_field": {
+                    "value": "node6"
+                }
+            }
+        ]
+    },
+    "relations": [
+        {
+            "start": "id0",
+            "end": "id1",
+            "throughput": 100,
+            "response_time": 100
+        },
+        {
+            "start": "id0",
+            "end": "id2",
+            "throughput": "",
+            "response_time": ""
+        },
+        {
+            "start": "id0",
+            "end": "id3",
+            "throughput": "",
+            "response_time": ""
+        },
+        {
+            "start": "id3",
+            "end": "id6",
+            "throughput": "10",
+            "response_time": "10"
+        }
+    ],
+    "except": ["id1", "id5"]
+}

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>jsPlumb</title>
+
+    <style>
+        /* item style */
+        .topo-item {
+            position: absolute;
+            z-index: 4;
+            border: 1px solid #2e6f9a;
+            opacity: 0.8;
+            filter: alpha(opacity=80);
+            cursor: move;
+            background-color: white;
+            font-size: 11px;
+            padding: 10px;
+        }
+
+        .topo-item-title {
+            background: #DDDDDD;
+        }
+
+        .topo-item-content {
+            cursor: pointer;
+        }
+
+        /* topo box */
+        #topo-container {
+            height: 500px;
+            max-height: 500px;
+            border: 1px solid #CCC;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* 删除label */
+        .removeConnect {
+            background-color: white;
+            opacity: 0.8;
+            padding: 0px;
+            border: 1px dotted #346789;
+            cursor: pointer;
+            font-size: 0.5em;
+            font-weight: bold;
+        }
+
+        .removeConnect:hover {
+            background-color: #6275bc;
+            color: #ffffff;
+        }
+
+    </style>
+</head>
+<body>
+
+<div id="topo-container">
+    <div class="topo-item" id="phone1" style="left: 100px;top: 100px;">
+        <div class="topo-item-title">title</div>
+        <div class="topo-item-content">PHONE INTERVIEW 1</div>
+    </div>
+    <div class="topo-item" id="phone2" style="left: 100px;top: 300px;">
+        <div class="topo-item-title">title</div>
+        <div class="topo-item-content">PHONE INTERVIEW 2</div>
+    </div>
+    <div class="topo-item" id="inperson" style="left: 300px;top: 300px;">
+        <div class="topo-item-title">title</div>
+        <div class="topo-item-content">inperson</div>
+    </div>
+</div>
+
+
+<script src="js/jsPlumb-1.7.10-min.js"></script>
+<script>
+    jsPlumb.ready(function () {
+
+        //初始化实例
+        var instance = jsPlumb.getInstance({
+            Endpoint: "Blank",
+            Anchor: "Continuous",
+            PaintStyle: {strokeStyle: "#5c96bc", lineWidth: 2},
+            HoverPaintStyle: {strokeStyle: "orange", lineWidth: 2 },
+            Connector: "Straight",
+            ConnectionOverlays: [
+                [ "Arrow", {
+                    location: 1,
+                    length: 10,
+                    width: 10
+                } ],
+                [ "Label", { label: "&times;", id: "labelsss", cssClass: "removeConnect" }]
+            ],
+            Container: "topo-container"
+        });
+
+        //设置可拖拽元素
+        instance.draggable(jsPlumb.getSelector(".topo-item"));
+
+        //连线 source：开始元素(id)，target：结束元素(id)
+        instance.connect({ source: document.getElementById('phone2'), target: document.getElementById('phone1')});
+        instance.connect({ source: "phone1", target: "inperson"});
+
+        //删除连线
+        instance.bind("click", function (connect, event) {
+            if (confirm("确定要删除连线吗？")) {
+                jsPlumb.detach(connect)
+            }
+        });
+
+        //设置拖动连线
+        var items = document.getElementsByClassName('topo-item');
+        for (var i = 0; i < items.length; i++) {
+            instance.makeSource(items[i], {
+                filter: ".topo-item-content" //过滤指定可拖动连线元素
+            });
+            instance.makeTarget(items[i], {});
+        }
+        //连线完成触发
+        instance.bind('connection', function (obj, event) {
+            console.log('connection line end!')
+            if (obj.source == obj.target) {
+                jsPlumb.detach(obj.connection);
+            }
+        })
+
+    });
+
+</script>
+
+</body>
+</html>
