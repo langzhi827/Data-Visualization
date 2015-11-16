@@ -1,0 +1,27 @@
+{
+  "name": "GeoMap",
+  "version": "0.0.1",
+  "authors": [
+    "harry.lang"
+  ],
+  "description": "解析geoJson数据为path",
+  "keywords": [
+    "geo",
+    "geoJson",
+    "map",
+    "zrender"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "zrender": "~2.1.1",
+    "esl": "~2.0.8"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "name": "esl",
+  "homepage": "https://github.com/ecomfe/esl",
+  "version": "2.0.8",
+  "_release": "2.0.8",
+  "_resolution": {
+    "type": "version",
+    "tag": "2.0.8",
+    "commit": "4efc7697a2dff94d90daf8b39b1f27456720b69b"
+  },
+  "_source": "git://github.com/ecomfe/esl.git",
+  "_target": "~2.0.8",
+  "_originalSource": "esl",
+  "_direct": true
+}

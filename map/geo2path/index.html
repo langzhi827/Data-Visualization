@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>geo map example</title>
+</head>
+<body>
+
+<div id="map" style="width: 800px;height:400px;margin: 50px auto;border:1px solid #ccc;"></div>
+
+<script src="bower_components/esl/src/esl.js"></script>
+<script src="bower_components/zrender/build/zrender.js"></script>
+<script type="text/javascript">
+    // 路径配置
+    require.config({
+        paths: {
+            drawMap: './js/drawMap'
+        }
+    });
+
+    require(['drawMap'], function () {
+    });
+
+</script>
+
+</body>
+</html>
