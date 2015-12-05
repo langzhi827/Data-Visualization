@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>D3 Pack Example</title>
+    <style>
+        .pack-node {
+            cursor: pointer;
+            fill: rgb(235, 100, 39);
+            fill-opacity: .25;
+            stroke: rgb(235, 100, 39);
+            stroke-width: 1px;
+        }
+
+        .pack-node:hover {
+            stroke: #000000;
+            stroke-width: 1.5px;
+        }
+
+        .pack-label {
+            font: 12px "MICROSOFT YAHEI", Helvetica, Arial, sans-serif;
+            text-anchor: middle;
+            text-shadow: 0 1px 0 #ffffff, 1px 0 0 #ffffff, -1px 0 0 #ffffff, 0 -1px 0 #ffffff;
+        }
+
+        .pack-label,
+        .pack-node-root,
+        .pack-node-leaf {
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+
+<div id="test" style="width: 500px;height: 500px;"></div>
+
+<script src="d3.min.js"></script>
+<script src="pack.js"></script>
+
+<script>
+    pack(d3.select('#test'), 'data.json', ['country', 'privince', 'city'], '指标');
+</script>
+
+</body>
+</html>
