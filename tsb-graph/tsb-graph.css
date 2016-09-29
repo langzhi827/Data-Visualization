@@ -1,0 +1,135 @@
+.tsb-graph,
+.tsb-graph *,
+.tsb-graph *:after,
+.tsb-graph *:before {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.tsb-graph {
+    position: relative;
+}
+
+.graph-scale {
+    position: relative;
+    height: 25px;
+    margin-left: 20%;
+    line-height: 25px;
+}
+
+.graph-number {
+    position: absolute;
+    top: 0;
+    width: 12.5%;
+    text-align: center;
+}
+
+.graph-lines {
+    position: absolute;
+    left: 20%;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: -1;
+}
+
+.graph-line {
+    position: absolute;
+    top: 20px;
+    bottom: 0;
+    width: 1px;
+    background-color: #CCCCCC;
+}
+
+.graph-title {
+    background: #dddddd;
+    height: 35px;
+    line-height: 35px;
+    padding: 0 10px;
+}
+
+.graph-item {
+    height: 40px;
+    border-bottom: 1px solid #CCCCCC;
+}
+
+.graph-item:before,
+.graph-item:after {
+    content: '';
+    display: table;
+}
+
+.graph-item:after {
+    clear: both;
+}
+
+.graph-item-label {
+    width: 20%;
+    overflow: hidden;
+    padding-left: 10px;
+    padding-right: 5px;
+    float: left;
+}
+
+.graph-item-title {
+    float: left;
+    line-height: 40px;
+}
+
+.graph-item-data {
+    float: right;
+    text-align: right;
+}
+
+.graph-item-value {
+    color: #00a2ff;
+}
+
+.graph-item-place {
+    position: relative;
+    margin-left: 20%;
+    height: 100%;
+}
+
+.graph-index-progress {
+    position: absolute;
+    width: 0;
+    height: 100%;
+    left: 0;
+}
+
+.graph-trace-progress {
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 0;
+    height: 20px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+}
+
+.graph-orange {
+    background-color: orange;
+}
+
+.graph-blue {
+    background-color: blue;
+}
+
+.graph-tooltip-line {
+    position: absolute;
+    top: 20px;
+    bottom: 0;
+    z-index: 4;
+    width: 1px;
+    background-color: #000000;
+}
+
+.graph-tooltip-info {
+    position: absolute;
+    background: #ffffff;
+    border: 1px solid #CCCCCC;
+    padding: 10px 20px;
+}

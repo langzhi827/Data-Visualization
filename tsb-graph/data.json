@@ -1,0 +1,56 @@
+{
+    "cpu_average": "25%",
+    "memory_average": "20M",
+    "time_range": [
+        0,
+        450
+    ],
+    "current_cpu": [
+        {
+            "50": "20%"
+        },
+        {
+            "100": "25%"
+        },
+        {
+            "150": "30%"
+        }
+    ],
+    "current_memory": [
+        {
+            "0": "15M"
+        },
+        {
+            "100": "30M"
+        },
+        {
+            "150": "20M"
+        }
+    ],
+    "tree": {
+        "view": [
+            {
+                "name": "view1",
+                "start_time": 0,
+                "duration": 200
+            },
+            {
+                "name": "view2",
+                "start_time": 0,
+                "duration": 200
+            }
+        ],
+        "request": [
+            {
+                "name": "request1",
+                "start_time": 100,
+                "duration": 200
+            },
+            {
+                "name": "request2",
+                "start_time": 150,
+                "duration": 300
+            }
+        ]
+    }
+}
