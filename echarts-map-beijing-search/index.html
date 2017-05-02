@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <!-- 文档兼容模式的定义 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <!-- 优先使用webkit内核渲染页面 -->
+    <meta name="renderer" content="webkit">
+    <title>北京地图，可搜索</title>
+    <meta name="keywords" content="harry,front-end"/>
+    <meta name="description" content="front-end">
+    <meta name="author" content="harry.lang">
+
+    <link rel="shortcut icon" type="image/ico" href="favicon.ico"/>
+    <!--[if lt IE 9]><![endif]-->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            height: 100%;
+            font-size: 12px;
+        }
+
+        #main {
+            height: 100%;
+            background: url(img/bbg.png);
+        }
+
+        .search {
+            position: absolute;
+            left: 100px;
+            top: 50px;
+            z-index: 10;
+        }
+
+        .search_input {
+            width: 206px;
+            height: 18px;
+            line-height: 18px;
+            padding: 0 5px;
+            background: #ffffff;
+            color: #000000;
+            float: left;
+            border: none;
+        }
+
+        .search_icon {
+            float: left;
+            display: inline-block;
+            width: 37px;
+            height: 17px;
+            background: url(img/search_icon.png) 50% 0 no-repeat;
+            margin-left: 10px;
+            border-left: 1px solid #0ae2f4;
+        }
+    </style>
+</head>
+<body>
+
+<div class="search">
+    <input class="search_input" type="text" placeholder="请输入地区名称">
+    <a class="search_icon" href="javascript:void(0);"></a>
+</div>
+<div id="main">
+</div>
+
+<script type="text/javascript" src="jquery.min.js"></script>
+<script type="text/javascript" src="echarts-2.2.7/echarts.js"></script>
+<script>
+    (function () {
+        function requestSearch(paras) {
+            var url = location.href;
+            var paraString = url.substring(url.indexOf("?") + 1, url.length).split("&");
+            var paraObj = {}
+            for (i = 0; j = paraString[i]; i++) {
+                paraObj[j.substring(0, j.indexOf("=")).toLowerCase()] = j.substring(j.indexOf("=") + 1, j.length);
+            }
+            var returnValue = paraObj[paras.toLowerCase()];
+            if (typeof(returnValue) == "undefined") {
+                return "";
+            } else {
+                return returnValue;
+            }
+        }
+
+        var select_place = decodeURIComponent(requestSearch('part')) || "";      //点击的区域
+        var zuobiao = {
+            "1": ["116.4551", "40.0039"],
+            "2": ["116.7051", "39.9439"],
+            "11": ["116.2551", "40.0539"],
+            "12": ["116.2851", "39.9539"],
+            "13": ["116.2051", "40.1039"],
+            "14": ["116.5551", "40.2939"],
+            "15": ["116.9551", "40.3539"],
+            "16": ["116.5951", "39.7539"],
+            "31": ["116.0426", "40.3613"],
+            "52": ["115.961", "40.0194"],
+            "101": ["116.1521", "40.2568"],
+            "102": ["116.7951", "40.1039"],
+            "104": ["115.9954", "39.8311"],
+            "106": ["116.4091", "39.8779"],
+            "107": ["116.1551", "39.8311"],
+            "108": ["116.3751", "39.9059"],
+            "110": ["116.0398", "39.9312"],
+            "111": ["116.5935", "39.9675"],
+            "112": ["116.9851", "40.1039"],
+            "113": ["116.5005", "39.9051"],
+            "114": ["116.2451", "40.2539"],
+            "115": ["115.9784", "39.7541"],
+            "116": ["116.3451", "39.7909"],
+            "117": ["116.3914", "39.8311"]
+        };
+        var dataValue = [
+            {
+                "name": "1",
+                "value": 49
+            },
+            {
+                "name": "2",
+                "value": 49
+            },
+            {
+                "name": "11",
+                "value": 49
+            },
+            {
+                "name": "12",
+                "value": 49
+            },
+            {
+                "name": "13",
+                "value": 49
+            },
+            {
+                "name": "14",
+                "value": 49
+            },
+            {
+                "name": "15",
+                "value": 49
+            },
+            {
+                "name": "16",
+                "value": 49
+            },
+            {
+                "name": "31",
+                "value": 49
+            },
+            {
+                "name": "52",
+                "value": 49
+            },
+            {
+                "name": "101",
+                "value": 49
+            },
+            {
+                "name": "102",
+                "value": 49
+            },
+            {
+                "name": "104",
+                "value": 49
+            },
+            {
+                "name": "106",
+                "value": 49
+            },
+            {
+                "name": "107",
+                "value": 49
+            },
+            {
+                "name": "108",
+                "value": 49
+            },
+            {
+                "name": "110",
+                "value": 49
+            },
+            {
+                "name": "111",
+                "value": 49
+            },
+            {
+                "name": "112",
+                "value": 49
+            },
+            {
+                "name": "113",
+                "value": 49
+            },
+            {
+                "name": "114",
+                "value": 49
+            },
+            {
+                "name": "115",
+                "value": 49
+            },
+            {
+                "name": "116",
+                "value": 49
+            },
+            {
+                "name": "117",
+                "value": 49
+            }
+        ];
+        var monitor_data = {
+            "1": {"x": "116.4551", "y": "40.0039", "value": 49, "name": "上地东里"},
+            "2": {"x": "116.7051", "y": "39.9439", "value": 49, "name": "月季园"},
+            "11": {"x": "116.2551", "y": "40.0539", "value": 49, "name": "裕中西里"},
+            "12": {"x": "116.2851", "y": "39.9539", "value": 49, "name": "裕中东里"},
+            "13": {"x": "116.2051", "y": "40.1039", "value": 49, "name": "北奥国际"},
+            "14": {"x": "116.5551", "y": "40.2939", "value": 49, "name": "安琪大厦"},
+            "15": {"x": "116.9551", "y": "40.3539", "value": 49, "name": "北京上舍"},
+            "16": {"x": "116.5951", "y": "39.7539", "value": 49, "name": "金都心语"},
+            "31": {"x": "116.0426", "y": "40.3613", "value": 49, "name": "风雅园二区"},
+            "52": {"x": "115.961", "y": "40.0194", "value": 49, "name": "双旗杆东里"},
+            "101": {"x": "116.1521", "y": "40.2568", "value": 49, "name": "椿树园"},
+            "102": {"x": "116.7951", "y": "40.1039", "value": 49, "name": "东晶国际"},
+            "104": {"x": "115.9954", "y": "39.8311", "value": 49, "name": "上北鑫座"},
+            "106": {"x": "116.4091", "y": "39.8779", "value": 49, "name": "国融国际"},
+            "107": {"x": "116.1551", "y": "39.8311", "value": 49, "name": "公园两栋"},
+            "108": {"x": "116.3751", "y": "39.9059", "value": 49, "name": "北方方糖"},
+            "110": {"x": "116.0398", "y": "39.9312", "value": 49, "name": "中铁花溪渡"},
+            "111": {"x": "116.5935", "y": "39.9675", "value": 49, "name": "樱花园二期"},
+            "112": {"x": "116.9851", "y": "40.1039", "value": 49, "name": "前进花园一区"},
+            "113": {"x": "116.5005", "y": "39.9051", "value": 49, "name": "莲花小区"},
+            "114": {"x": "116.2451", "y": "40.2539", "value": 49, "name": "恩济花园"},
+            "115": {"x": "115.9784", "y": "39.7541", "value": 49, "name": "浦南西里"},
+            "116": {"x": "116.3451", "y": "39.7909", "value": 49, "name": "紫金长安"},
+            "117": {"x": "116.3914", "y": "39.8311", "value": 49, "name": "西钓鱼台嘉园"}
+        };
+        var place_monitor = {
+            "门头沟区": {"52": 52, "110": 110},
+            "房山区": {"104": 104, "115": 115},
+            "延庆县": {"31": 31},
+            "昌平区": {"101": 101, "114": 114},
+            "丰台区": {"107": 107, "117": 117},
+            "海淀区": {"11": 11, "12": 12, "13": 13},
+            "大兴区": {"116": 116},
+            "东城区": {"108": 108},
+            "崇文区": {"106": 106},
+            "朝阳区": {"1": 1, "111": 111, "113": 113},
+            "怀柔区": {"14": 14},
+            "通州区": {"2": 2, "16": 16},
+            "顺义区": {"102": 102},
+            "密云县": {"15": 15},
+            "平谷区": {"112": 112}
+        };
+
+        require.config({
+            paths: {
+                echarts: 'echarts-2.2.7'
+            }
+        });
+
+        require([
+            'echarts',
+            'echarts/chart/map'
+        ], function (ec) {
+            var myChart = ec.init(document.getElementById('main'));
+
+            var geoJs = {
+                '密云县': 'miyun',
+                '怀柔区': 'huairou',
+                '房山区': 'fangshan',
+                '延庆县': 'yanqing',
+                '门头沟区': 'mentougou',
+                '昌平区': 'changping',
+                '大兴区': 'daxing',
+                '顺义区': 'shunyi',
+                '平谷区': 'pinggu',
+                '通州区': 'tongzhou',
+                '朝阳区': 'chaoyang',
+                '海淀区': 'haidian',
+                '丰台区': 'fengtai',
+                '石景山区': 'shijingshan',
+                '西城区': 'xicheng',
+                '东城区': 'dongcheng',
+                '宣武区': 'xuanwu',
+                '崇文区': 'chongwen'
+            };
+
+            // 注册地图区域
+            for (var key in geoJs) {
+
+                (function (name) {
+                    require('echarts/util/mapData/params').params[name] = {
+                        getGeoJson: function (callback) {
+                            require(['mapdata/' + geoJs[name]], function (md) {
+                                callback(md);
+                            });
+                        }
+                    };
+                }(key));
+            }
+
+            var option = {
+                tooltip: {
+                    trigger: 'item',
+                    formatter: function (params) {
+                        var monitor_id = params[1];
+                        if (isNaN(monitor_id)) {
+                            return params[1];
+                        }
+                        var str = "";
+                        if (monitor_data[monitor_id]) {
+                            var this_data = monitor_data[monitor_id];
+                            str += this_data.name + ':' + this_data.value;
+                        }
+
+                        // 修改提示框坐标
+                        $('#main').children().css({overflow: 'inherit'});
+                        $('.echarts-tooltip').css({
+                            left: params.data.x,
+                            top: params.data.y
+                        });
+
+                        return str;
+                    },
+                    opacity: 0.3,
+                    backgroundColor: 'rgba(255,255,255,0.2)',
+                    padding: 2
+                },
+                dataRange: {
+                    splitList: [{
+                        start: 100.001,
+                        label: '故障'
+                    }, {
+                        start: 50,
+                        end: 100,
+                        label: '异常'
+                    }, {
+                        end: 49.999,
+                        label: '正常'
+                    }],
+                    color: ['#ff3333', 'orange', 'lime'],
+                    textStyle: {
+                        color: '#fff'
+                    }
+                },
+                series: [
+                    {
+                        name: '小区信息',
+                        type: 'map',
+                        mapType: select_place || '北京',
+                        mapLocation: {},
+                        nameMap: {
+                            '宣武区': '西城区',
+                            '崇文区': '东城区'
+                        },
+                        itemStyle: {
+                            normal: {
+                                label: {
+                                    show: false
+                                },
+                                borderColor: '#02a9c6',
+                                borderWidth: 1.5,
+                                areaStyle: {
+                                    color: '#010e1e'
+                                }
+                            },
+                            emphasis: {
+                                label: {
+                                    show: false,
+                                    textStyle: {
+                                        color: '#fff'
+                                    }
+                                },
+                                borderColor: '#fcffb4',
+                                borderWidth: 1.5,
+                                color: 'transparent'
+                            }
+                        },
+                        data: [],
+                        geoCoord: zuobiao,
+                        markPoint: {
+                            symbol: 'emptyCircle',
+                            symbolSize: function (val) {
+                                if (select_place) {
+                                    return 15;
+                                }
+                                if (val < 50) {
+                                    return 5;
+                                } else if (val >= 50 && val <= 100) {
+                                    return 10;
+                                } else {
+                                    return 12;
+                                }
+                                return 5;
+                            },
+                            effect: {
+                                show: true,
+                                type: 'scale'
+                            },
+                            itemStyle: {
+                                normal: {
+                                    label: {show: false}
+                                },
+                                emphasis: {
+                                    borderWidth: 0,
+                                    label: {show: false}
+                                }
+                            },
+                            data: dataValue
+                        }
+                    }
+                ]
+            };
+
+            myChart.setOption(option);
+
+
+            var ecConfig = require('echarts/config');
+
+            myChart.on(ecConfig.EVENT.CLICK, function (param) {
+                try {
+                    var monitor_name = param.name;
+                    if (isNaN(monitor_name)) {
+                        select_place = monitor_name;
+                        var local = window.location;
+                        var search = '';
+                        window.location.href = local.protocol + '//' + local.hostname + (!local.port ? '' : ':' + local.port) + local.pathname + '?part=' + select_place + '&search=' + search;
+                    }
+                } catch (e) {
+                    // console.log('map geo is null!')
+                }
+            });
+
+
+            var searchIcon = document.querySelector('.search_icon');
+            var searchInput = document.querySelector('.search_input');
+            searchIcon.addEventListener('click', function () {
+                var search_tip_result = document.querySelectorAll('.search_tip_result');
+                search_tip_result.forEach(function (elem) {
+                    elem.parentNode.removeChild(elem)
+                })
+
+                var val = searchInput.value;
+
+                if (val == '') {
+                    option.series[0].geoCoord = zuobiao;
+                    option.series[0].markPoint.data = dataValue;
+                    myChart.clear();
+                    myChart.setOption(option, true);
+                    return;
+                }
+
+                //过滤出包含搜索关键字的小区
+                var search_place = {};
+                var select_num = 0;
+                for (var i in monitor_data) {
+                    if (place_monitor[select_place] && typeof place_monitor[select_place][i] == 'undefined') {
+                        continue;
+                    }
+                    var monitor_name = monitor_data[i].name;
+                    if (monitor_name.indexOf(val) != -1) {
+                        search_place[i] = {
+                            value: monitor_data[i].value,
+                            name: monitor_data[i].name,
+                            pos: []
+                        };
+                        search_place[i].pos[0] = monitor_data[i].x;
+                        search_place[i].pos[1] = monitor_data[i].y;
+                        select_num++;
+                    }
+                }
+
+                var markPoints = [];
+
+                if (select_num > 0) {
+
+                    for (var j in search_place) {
+                        // 过滤地图markPoint数据
+                        markPoints.push({
+                            name: j,
+                            value: search_place[j].value
+                        });
+
+                        // 显示搜索结果的提示框
+                        var coord = search_place[j].pos;
+                        var pos = myChart.chart.map.getPosByGeo(select_place || '北京', coord);
+
+                        var tip = $('<div class="search_tip_result">' + monitor_data[j].name + '<br/>value:' + monitor_data[j].value + '</div>').css({
+                            position: 'absolute',
+                            'z-index': 99,
+                            border: '0px solid rgb(51, 51, 51)',
+                            'white-space': 'nowrap',
+                            'border-radius': '4px',
+                            color: 'rgb(255, 255, 255)',
+                            padding: '5px',
+                            left: pos[0] - 140 + 'px',
+                            top: pos[1] - 60 + 'px',
+                            'background-color': 'rgba(255, 255, 255, 0.2)',
+                            width: '140px',
+                            height: '60px'
+                        });
+
+                        tip.appendTo($('#main').children());
+                    }
+
+                    myChart.clear();
+                    option.series[0].markPoint.data = markPoints;
+                    myChart.setOption(option, true);
+
+                } else {
+
+                }
+
+
+            });
+
+
+        });
+    })()
+</script>
+
+
+</body>
+</html>
