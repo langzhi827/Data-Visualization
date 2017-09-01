@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <!-- 文档兼容模式的定义 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <!-- 优先使用webkit内核渲染页面 -->
+    <meta name="renderer" content="webkit">
+    <!-- 设置可视区域宽度与设备屏幕缩放比例为1.0 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+    <meta name="keywords" content="harry,front-end"/>
+    <meta name="description" content="front-end">
+    <meta name="author" content="harry.lang">
+
+    <link rel="shortcut icon" type="image/ico" href="favicon.ico"/>
+    <!--[if lt IE 9]><![endif]-->
+</head>
+<body style="background: #010103">
+<h5 style="color: #fff;">
+    阶段性转化图：新进 --> 跟踪中 --> 已签约 --> 已关闭
+</h5>
+<h5 style="color: #fff;">
+    按月份依次叠加堆积前几个月数量
+</h5>
+
+<div id="main" style="height: 400px;"></div>
+
+<script src="echarts.min.js"></script>
+<script>
+    (function () {
+        var data = [
+            {
+                "month": 1,
+                "data": [
+                    {
+                        "month": "1",
+                        "count": 120,
+                        "status01": 0,
+                        "status03": 0,
+                        "status02": 0
+                    }
+                ]
+            },
+            {
+                "month": 2,
+                "data": [
+                    {
+                        "month": "1",
+                        "count": 0,
+                        "status01": 30,
+                        "status03": 40,
+                        "status02": 50
+                    },
+                    {
+                        "month": "2",
+                        "count": 119,
+                        "status01": 0,
+                        "status03": 0,
+                        "status02": 0
+                    }
+                ]
+            },
+            {
+                "month": 3,
+                "data": [
+                    {
+                        "month": "1",
+                        "count": 0,
+                        "status01": 40,
+                        "status03": 50,
+                        "status02": 30
+                    },
+                    {
+                        "month": "2",
+                        "count": 0,
+                        "status01": 30,
+                        "status03": 20,
+                        "status02": 69
+                    },
+                    {
+                        "month": "3",
+                        "count": 87,
+                        "status01": 0,
+                        "status03": 0,
+                        "status02": 0
+                    }
+                ]
+            },
+            {
+                "month": 4,
+                "data": [
+                    {
+                        "month": "1",
+                        "count": 0,
+                        "status01": 40,
+                        "status03": 50,
+                        "status02": 30
+                    },
+                    {
+                        "month": "2",
+                        "count": 0,
+                        "status01": 30,
+                        "status03": 50,
+                        "status02": 39
+                    },
+                    {
+                        "month": "3",
+                        "count": 0,
+                        "status01": 25,
+                        "status03": 15,
+                        "status02": 47
+                    },
+                    {
+                        "month": "4",
+                        "count": 60,
+                        "status01": 0,
+                        "status03": 0,
+                        "status02": 0
+                    }
+                ]
+            },
+            {
+                "month": 5,
+                "data": [
+                    {
+                        "month": "1",
+                        "count": 0,
+                        "status01": 40,
+                        "status03": 50,
+                        "status02": 30
+                    },
+                    {
+                        "month": "2",
+                        "count": 0,
+                        "status01": 30,
+                        "status03": 50,
+                        "status02": 39
+                    },
+                    {
+                        "month": "3",
+                        "count": 0,
+                        "status01": 25,
+                        "status03": 15,
+                        "status02": 47
+                    },
+                    {
+                        "month": "4",
+                        "count": 60,
+                        "status01": 0,
+                        "status03": 0,
+                        "status02": 0
+                    }
+                ]
+            }
+        ];
+
+        function filter(data) {
+            var colors = {
+                count: '#1673c1',
+                status01: '#16a1c2',
+                status02: '#d17a45',
+                status03: '#d3d3d3'
+            };
+
+            var status = ['status03', 'status02', 'status01', 'count'];
+
+            var names = {
+                count: '新增',
+                status01: '跟进中',
+                status02: '已签约',
+                status03: '已关闭'
+            };
+
+
+            var maxLen = data.length;
+
+            var series = [], xAxis = [];
+            data.forEach(function (dt, index) {
+                xAxis.push(dt.month + '月');
+
+                dt.data.forEach(function (m, i) {
+
+                    status.forEach(function (s, si) {
+                        var serie = {
+                            name: dt.month + '月-' + names[s],
+                            type: 'bar',
+                            stack: '商机转换',
+                            label: {
+                                normal: {
+                                    show: true,
+                                    position: 'inside'
+                                }
+                            },
+                            data: []
+                        };
+
+                        for (var i = 0; i < maxLen; i++) {
+                            if (index == i) {
+                                serie.data.push({
+                                    value: m[s] || null,
+                                    itemStyle: {
+                                        normal: {
+                                            color: colors[s]
+                                        }
+                                    }
+                                });
+                            } else {
+                                serie.data.push(null);
+                            }
+                        }
+
+                        series.push(serie);
+                    });
+
+                });
+            });
+
+            return {
+                xAxis: xAxis,
+                series: series
+            };
+        }
+
+        var chart = echarts.init(document.querySelector('#main'));
+        var result = filter(data);
+
+        var option = {
+            tooltip: {},
+            xAxis: {
+                type: 'category',
+                data: result.xAxis,
+                axisLabel: {
+                    textStyle: {
+                        color: '#8e92b7'
+                    }
+                },
+                axisTick: {
+                    show: false
+                }
+            },
+            yAxis: {
+                type: 'value',
+                name: '单位/个',
+                axisLabel: {
+                    textStyle: {
+                        color: '#8e92b7'
+                    }
+                },
+                nameTextStyle: {
+                    color: '#8e92b7'
+                },
+                splitLine: {
+                    lineStyle: {
+                        color: '#8e92b7',
+                        type: 'dashed'
+                    }
+                },
+                axisLine: {
+                    show: false
+                },
+                axisTick: {
+                    show: false
+                }
+            },
+            series: result.series
+        };
+
+        chart.setOption(option)
+    })()
+
+</script>
+
+</body>
+</html>
