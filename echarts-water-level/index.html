@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <!-- 文档兼容模式的定义 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <!-- 优先使用webkit内核渲染页面 -->
+    <meta name="renderer" content="webkit">
+    <!-- 设置可视区域宽度与设备屏幕缩放比例为1.0 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+    <meta name="keywords" content="harry,front-end"/>
+    <meta name="description" content="front-end">
+    <meta name="author" content="harry.lang">
+
+    <link rel="shortcut icon" type="image/ico" href="favicon.ico"/>
+    <!--[if lt IE 9]><![endif]-->
+</head>
+
+<body style="background-color: rgb(34, 34, 86);">
+<div id="main" style="height: 400px;width:400px;"></div>
+
+<script src="echarts.min.js"></script>
+<script>
+    (function () {
+
+        var waterLine = 0.62;
+
+        drawWaterLine(waterLine);
+
+        function drawWaterLine(waterLine) {
+            var waterLine = waterLine - 1,
+                    absWaterLine = Math.abs(waterLine);
+
+            var chart = echarts.init(document.querySelector('#main'));
+
+            var option = {
+                title: {
+                    text: '水位图',
+                    textStyle: {
+                        color: '#ffffff'
+                    },
+                    left: 'center'
+                },
+                grid: {
+                    right: '15%'
+                },
+                xAxis: {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: [],
+                    axisLine: {
+                        show: false
+                    }
+                },
+                yAxis: [{
+                    type: 'value',
+                    min: -1,
+                    max: 0,
+                    axisLabel: {
+                        formatter: function (params) {
+                            return (10 - Math.abs(params) * 10) / 10;
+                        }
+                    },
+                    splitLine: {
+                        show: false
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: '#ffffff'
+                        }
+                    }
+                }, {
+                    type: 'value',
+                    min: -1,
+                    max: 0,
+                    axisLabel: {
+                        show: false
+                    },
+                    splitLine: {
+                        show: false
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: '#ffffff'
+                        }
+                    }
+                }],
+                series: {
+                    type: 'line',
+                    smooth: true,
+                    lineStyle: {
+                        normal: {
+                            width: 0
+                        }
+                    },
+                    areaStyle: {
+                        normal: {
+                            opacity: "0.6",
+                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                                offset: 0,
+                                color: 'transparent'
+                            }, {
+                                offset: absWaterLine,
+                                color: 'transparent'
+                            }, {
+                                offset: absWaterLine,
+                                color: 'red'
+                            }, {
+                                offset: 1,
+                                color: 'red'
+                            }])
+                        }
+
+                    },
+                    data: [waterLine, -1, waterLine],
+                    markLine: {
+                        symbol: 'none',
+                        lineStyle: {
+                            normal: {
+                                color: '#ffffff',
+                                type: 'dotted',
+                                width: 2
+                            }
+                        },
+                        data: [{
+                            yAxis: waterLine,
+                            label: {
+                                normal: {
+                                    formatter: '现在水位'
+                                }
+                            }
+                        }, {
+                            yAxis: -0.1,
+                            lineStyle: {
+                                normal: {
+                                    color: 'red'
+                                }
+                            },
+                            label: {
+                                normal: {
+                                    formatter: '警戒线'
+                                }
+                            }
+                        }, {
+                            yAxis: -1,
+                            label: {
+                                normal: {
+                                    formatter: '河床'
+                                }
+                            }
+                        }]
+                    }
+                }
+            };
+
+            chart.setOption(option)
+
+        }
+
+
+    })()
+
+</script>
+
+</body>
+</html>
