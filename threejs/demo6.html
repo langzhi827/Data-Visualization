@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <!-- 文档兼容模式的定义 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <!-- 优先使用webkit内核渲染页面 -->
+    <meta name="renderer" content="webkit">
+    <!-- 设置可视区域宽度与设备屏幕缩放比例为1.0 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>threejs</title>
+    <meta name="keywords" content="harry,front-end"/>
+    <meta name="description" content="front-end">
+    <meta name="author" content="harry.lang">
+
+    <link rel="shortcut icon" type="image/ico" href="favicon.ico"/>
+    <!--[if lt IE 9]><![endif]-->
+</head>
+<body>
+<script src="lib/three.js"></script>
+<script>
+
+    /**
+     * 相机：
+     * 透视投影相机的构造函数如下所示：
+     *      PerspectiveCamera( fov, aspect, near, far )
+     *          视角fov：我的理解是,眼睛睁开的角度,即,视角的大小,如果设置为0,相当你闭上眼睛了,所以什么也看不到,如果为180,那么可以认为你的视界很广阔,但是在180度的时候，往往物体很小，因为他在你的整个可视区域中的比例变小了
+     *          近平面near：示你近处的裁面的距离。补充一下，也可以认为是眼睛距离近处的距离
+     *          远平面far：表示你远处的裁面
+     *          纵横比aspect：实际窗口的纵横比，即宽度除以高度。这个值越大，说明你宽度越大，那么你可能看的是宽银幕电影了，如果这个值小于1，那么就是竖屏了
+     * 正投影的构造函数如下所示：
+     *      OrthographicCamera( left, right, top, bottom, near, far )
+     *          left：左平面距离相机中心点的垂直距离。
+     *          right：右平面距离相机中心点的垂直距离。
+     *          top：顶平面距离相机中心点的垂直距离。
+     *          bottom：底平面距离相机中心点的垂直距离。
+     *          near：近平面距离相机中心点的垂直距离。
+     *          far：远平面距离相机中心点的垂直距离。
+     *      注：将浏览器窗口的宽度和高度作为了视景体的高度和宽度，相机正好在窗口的中心点上。
+     *          这也是我们一般的设置方法，基本上为了方便，我们不会设置其他的值。
+     */
+
+    // 场景
+    var scene = new THREE.Scene();
+    // 透视相机
+    var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    // 正投影相机
+    camera = new THREE.OrthographicCamera(-10, 10, 10, -10, 0.1, 1000);
+
+    // 渲染器
+    var renderer = new THREE.WebGLRenderer();
+    // 设置渲染器的大小为窗口的内宽度，也就是内容区的宽度
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    //  renderer.domElement --- 渲染器中的画布
+    document.body.appendChild(renderer.domElement);
+    // 添加物体到场景中
+    // CubeGeometry 几何体
+    var geometry = new THREE.CubeGeometry(2, 1, 1);
+    var material = new THREE.MeshBasicMaterial({color: 'red'});
+    var cube = new THREE.Mesh(geometry, material);
+    scene.add(cube);
+    camera.position.z = 5;
+    renderer.render(scene, camera);
+
+</script>
+</body>
+</html>

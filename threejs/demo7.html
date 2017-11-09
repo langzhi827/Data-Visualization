@@ -18,14 +18,10 @@
 </head>
 <body>
 <script src="lib/three.js"></script>
-<script src="lib/stats.js"></script>
-<script src="lib/tweenjs-0.6.2.min.js"></script>
 <script>
 
-    //     性能监控
-    var stats = new Stats();
-    stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
-    document.body.appendChild(stats.dom);
+    /**
+     */
 
     // 场景
     var scene = new THREE.Scene();
@@ -39,22 +35,12 @@
     document.body.appendChild(renderer.domElement);
     // 添加物体到场景中
     // CubeGeometry 几何体
-    // ---width：立方体x轴的长度
-    // ---height：立方体y轴的长度
-    // ---depth：立方体z轴的深度，也就是长度
-    var geometry = new THREE.CubeGeometry(1, 1, 1);
-    var material = new THREE.MeshBasicMaterial({color: 0x00ff00});
+    var geometry = new THREE.CubeGeometry(2, 1, 1);
+    var material = new THREE.MeshBasicMaterial({color: 'red'});
     var cube = new THREE.Mesh(geometry, material);
     scene.add(cube);
     camera.position.z = 5;
     renderer.render(scene, camera);
-
-    createjs.Tween.get(cube.rotation, {loop: true})
-            .to({x: 1, y: 3}, 1000)
-            .to({x: 0, y: 3}, 1000).addEventListener('change', function () {
-                renderer.render(scene, camera);
-                stats.update();
-            });
 
 </script>
 </body>
