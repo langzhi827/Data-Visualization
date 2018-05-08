@@ -1,0 +1,68 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    padding: 50px;
+    background: #0f1630;
+}
+
+#main {
+    overflow: hidden;
+    height: 500px;
+}
+
+.d3-conversio-chart-chart {
+    float: left;
+}
+
+.d3-conversio-chart-table table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+    color: #ffffff;
+    font-size: 18px;
+}
+
+.d3-conversio-chart-table td,
+.d3-conversio-chart-table th {
+    text-align: left;
+    border-bottom: 1px solid #13355d;
+    font-weight: normal;
+}
+
+.d3-conversio-chart-table th {
+    height: 60px;
+    color: #289efc;
+}
+
+.d3-conversio-chart-table td {
+    font-size: 18px;
+}
+
+.d3-conversio-chart-table td small {
+    font-size: 18px;
+}
+
+.d3-conversio-chart-label {
+    height: 30px;
+    line-height: 28px;
+    padding: 0 10px;
+    text-align: center;
+    display: inline-block;
+    border: 1px dashed #289efc;
+    background: rgba(40, 158, 252, 0.2);
+    border-radius: 2px;
+    color: rgba(40, 158, 252, 1);
+    font-size: 18px;
+}
+
+.d3-conversio-chart-red {
+    color: #fa2a2a;
+}
+
+.d3-conversio-chart-orange {
+    color: #fdc02d;
+}

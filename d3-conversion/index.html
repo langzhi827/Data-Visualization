@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>d3转化漏斗图</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+    <div id="main"></div>
+
+    <script src="./jquery.min.js"></script>
+    <script src="d3.js"></script>
+    <script src="./ConversionChart.js"></script>
+    <script>
+        (function () {
+
+            var container = $('#main');
+            var chartBox = $('<div class="d3-conversio-chart-chart"></div>')
+                .css({
+                    'height': container.height(),
+                    width: 700
+                })
+                .appendTo(container);
+            var tableBox = $('<div class="d3-conversio-chart-table">' +
+                '<table>' +
+                '<thead></thead>' +
+                '<tbody></tbody>' +
+                '</table>' +
+                '</div>')
+                .css({
+                    'height': container.height(),
+                    marginLeft: 700
+                })
+                .appendTo(container);
+
+            var option = {
+                element: chartBox.get(0),
+                color: [
+                    {
+                        value: ['#289efc', '#2cfdfd'],
+                        type: 'diagonal'
+                    },
+                    ['#c333d4', '#db23f1'],
+                    ['#daa526', '#fdc02d'],
+                    ['#d83131', '#fc6b4e'],
+                    ['#785af9', '#9680f4'],
+                    ['#c7b941', '#e0de13'],
+                    ['#27c77e', '#51e8a3'],
+                    ['#1791df', '#2cfdfd'],
+                ],
+                chart: {
+                    width: 350,
+                    leftTitle: '转化率',
+                    title: '转化漏斗',
+                    labelDistance: 200,
+                    callback: function (params, info) {
+                        var thead = '<th>&nbsp;</th>';
+                        var tbody = '<tr>';
+                        tbody += '<td style="height:' + info.height + 'px"><span class="d3-conversio-chart-label">' + params.name + '</span></td>';
+                        var _tableTitle = [{
+                            title: '缓慢影响',
+                            field: 'slowValue',
+                            percentage: 'slowPer'
+                        }, {
+                            title: '错误影响',
+                            field: 'errorValue',
+                            percentage: 'errorPer'
+                        }, {
+                            title: '崩溃影响',
+                            field: 'catonValue',
+                            percentage: 'catonPer'
+                        }];
+                        _tableTitle.forEach(function (dt) {
+                            // thead
+                            thead += '<th>' + dt.title + '</th>';
+                            // tbody
+                            var clazz = '';
+                            if (params[dt.percentage] > 1 && params[dt.percentage] <= 2) {
+                                clazz = 'd3-conversio-chart-orange';
+                            } else if (params[dt.percentage] > 2) {
+                                clazz = 'd3-conversio-chart-red';
+                            }
+                            var field = (parseInt(params[dt.field]) >= 0) ? params[dt.field] : '-';
+                            var percentage = (parseFloat(params[dt.percentage]) >= 0) ? (params[dt.percentage] + '%') : '-';
+
+                            tbody += '<td class="' + clazz + '" style="height:' + info.height + 'px">' + field + '<small> (' + percentage + ')</small></td>';
+                        });
+                        tbody += '</tr>';
+                        tbody += '<tr><td style="border:0;height:' + info.space + 'px;"></td></tr>';
+
+                        tableBox.find('thead').html(thead);
+                        tableBox.find('tbody').append(tbody);
+                    },
+                    leftLableFormatter: function (v) {
+                        return v + '%';
+                    },
+                    innerLableFormatter: function (v) {
+                        return v + '万';
+                    }
+                },
+                data: [
+                    {
+                        name: '搜索',
+                        value: 100,
+                        slowValue: 100,
+                        slowPer: 0.3,
+                        errorValue: 100,
+                        errorPer: 0.3,
+                        catonValue: 100,
+                        catonPer: 0.3
+                    }, {
+                        name: '加入购物车',
+                        value: 80,
+                        slowValue: 100,
+                        slowPer: 0.3,
+                        errorValue: 100,
+                        errorPer: 0.3,
+                        catonValue: 100,
+                        catonPer: 0.13
+                    },
+                    {
+                        name: '查看购物车',
+                        value: 60,
+                        slowValue: 100,
+                        slowPer: 0.3,
+                        errorValue: 100,
+                        errorPer: 1.3,
+                        catonValue: 100,
+                        catonPer: 3
+                    }, {
+                        name: '确认订单',
+                        value: 50,
+                        slowValue: 100,
+                        slowPer: 0.3,
+                        errorValue: 100,
+                        errorPer: 0.3,
+                        catonValue: 100,
+                        catonPer: 0.3
+                    }, {
+                        name: '确认支付',
+                        value: 30,
+                        slowValue: 100,
+                        slowPer: 0.3,
+                        errorValue: 100,
+                        errorPer: 0.3,
+                        catonValue: 100,
+                        catonPer: 0.3
+                    }, {
+                        name: '支付成功',
+                        value: 20,
+                        slowValue: 100,
+                        slowPer: 0.3,
+                        errorValue: 100,
+                        errorPer: 0.3,
+                        catonValue: 100,
+                        catonPer: 0.3
+                    }
+                ]
+            };
+
+
+
+            new ConversionChart(option);
+        })();
+    </script>
+</body>
+
+</html>
